@@ -1,0 +1,10 @@
+.btnWrapper {
+    display: flex;
+    align-items: center;
+    max-width: 100px;
+    gap: 14px;
+}
+
+.btnWrapper > button {
+    width: fit-content;
+}

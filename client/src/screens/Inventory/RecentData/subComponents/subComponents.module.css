@@ -1,0 +1,30 @@
+.recentCardContainer {
+  height: 113px;
+  min-width: 178px;
+  width: 178px;
+  padding: 0px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.recentCardContainer:first-child {
+  margin-left: 35px;
+}
+
+.recentCardContainer:last-child {
+    margin-right: 35px;
+  }
+
+.recentCardListContainer {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  overflow: auto;
+  margin-top: 25px;
+  margin-left: -35px;
+  margin-right: -35px;
+}

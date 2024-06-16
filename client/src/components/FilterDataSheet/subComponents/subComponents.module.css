@@ -1,0 +1,28 @@
+.filterHeader {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
+.filterHeader > img {
+    cursor: pointer;
+}
+
+
+.filterCategoryContainer {
+    /* TODO: tempory styling */
+    margin-bottom: 40px;
+}
+
+.filterCategoryList {
+    margin: 25px 0px;
+}
+
+.filterItemContainer {
+    margin-top: 8px;
+}
+
+.filterCategoryItem {
+    padding: 9px 12px;
+}

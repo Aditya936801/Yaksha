@@ -1,0 +1,11 @@
+.container {
+    background-color: white;
+    padding: 30px;
+}
+
+.buttonWrapper {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: space-between;
+}
