@@ -31,9 +31,12 @@ export const getRecentData = async (req, res) => {
 export const getAvgMsrpGraphData = async (req, res) => {
   try {
     const condition = req.query.condition;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const pipeline = [
       {
         $match: {
+          timestamp: { $lte: today },
           condition: condition,
         },
       },
@@ -71,10 +74,13 @@ export const getAvgMsrpGraphData = async (req, res) => {
 export const getInventoryGraphData = async (req, res) => {
   try {
     const condition = req.query.condition;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     const pipeline = [
       {
         $match: {
+          timestamp: { $lte: today },
           condition: condition,
         },
       },
@@ -113,9 +119,15 @@ export const getTableData = async (req, res) => {
   try {
     const { isAsc, page, numberOfRows, make, duration } = req.body;
     const skip = numberOfRows * (page - 1);
-
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const pipeline = [
       [
+        {
+          $match: {
+            timestamp: { $lte: today },
+          },
+        },
         {
           $group: {
             _id: {
