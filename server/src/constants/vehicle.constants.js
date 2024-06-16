@@ -1,0 +1,42 @@
+export const RECENT_DATA_HEADING = [
+  {
+    category: "# New Units",
+    value: 379,
+    displayValue: "379",
+  },
+  {
+    category: "New MSRP",
+    value: 1302346,
+    displayValue: "$13,023,46",
+  },
+  {
+    category: "New Avg. MSRP",
+    value: 52882,
+    displayValue: "$52,882",
+  },
+  {
+    category: "# Used Units",
+    value: 67,
+    displayValue: "67",
+  },
+  {
+    category: "Used MSRP",
+    value: 1576456,
+    displayValue: "$1,576,456",
+  },
+  {
+    category: "Used Avg. MSRP",
+    value: 23351,
+    displayValue: "$23,351",
+  },
+  {
+    category: "# CPO Units",
+    value: 1,
+    displayValue: "1",
+  },
+  {
+    category: "CPO MSRP",
+    value: 31200,
+    displayValue: "$31,200",
+  },
+];

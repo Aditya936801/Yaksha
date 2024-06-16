@@ -1,6 +1,7 @@
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { vehicles } from "../models/vehicle.model.js";
+import { getRecentDataArray, getGraphData } from "../utils/vehicle.js";
 
 export const getRecentData = async (req, res) => {
   try {
@@ -20,8 +21,33 @@ export const getRecentData = async (req, res) => {
           avgMsrp: { $avg: "$price" },
         },
       },
+      {
+        $project: {
+          unit: "$unit",
+          msrp: "$msrp",
+          avgMsrp: "$avgMsrp",
+          order: {
+            $cond: {
+              if: { $eq: ["$_id", "new"] },
+              then: 1,
+              else: {
+                $cond: {
+                  if: { $eq: ["$_id", "used"] },
+                  then: 2,
+                  else: 3,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $sort: { order: 1 },
+      },
     ];
-    const data = await vehicles.aggregate(pipeline);
+    const arr = await vehicles.aggregate(pipeline);
+    const data = getRecentDataArray(arr);
+
     return res.status(200).json(new ApiResponse(200, data));
   } catch (err) {
     throw new ApiError(500, err?.message);
@@ -64,7 +90,9 @@ export const getAvgMsrpGraphData = async (req, res) => {
         },
       },
     ];
-    const data = await vehicles.aggregate(pipeline);
+    const arr = await vehicles.aggregate(pipeline);
+    const data = getGraphData(arr);
+
     return res.status(200).json(new ApiResponse(200, data));
   } catch (err) {
     throw new ApiError(500, err?.message);
@@ -108,7 +136,8 @@ export const getInventoryGraphData = async (req, res) => {
         },
       },
     ];
-    const data = await vehicles.aggregate(pipeline);
+    const arr = await vehicles.aggregate(pipeline);
+    const data = getGraphData(arr);
     return res.status(200).json(new ApiResponse(200, data));
   } catch (err) {
     throw new ApiError(500, err?.message);
