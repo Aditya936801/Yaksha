@@ -1,7 +1,11 @@
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { vehicles } from "../models/vehicle.model.js";
-import { getRecentDataArray, getGraphData } from "../utils/vehicle.js";
+import {
+  getRecentDataArray,
+  getGraphData,
+  getFilterPipeLine,
+} from "../utils/vehicle.js";
 
 export const getRecentData = async (req, res) => {
   try {
@@ -151,109 +155,107 @@ export const getTableData = async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const pipeline = [
-      [
-        {
-          $match: {
-            timestamp: { $lte: today },
-          },
+      {
+        $match: {
+          timestamp: { $lte: today },
         },
-        {
-          $group: {
-            _id: {
-              $dateToString: {
-                format: "%Y-%m-%d",
-                date: "$timestamp",
-              },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$timestamp",
             },
-            newUnit: {
-              $sum: {
-                $cond: {
-                  if: { $eq: ["$condition", "new"] },
-                  then: 1,
-                  else: 0,
-                },
-              },
-            },
-            newMsrp: {
-              $sum: {
-                $cond: {
-                  if: { $eq: ["$condition", "new"] },
-                  then: "$price",
-                  else: 0,
-                },
-              },
-            },
-            newAvgMsrp: {
-              $avg: {
-                $cond: {
-                  if: { $eq: ["$condition", "new"] },
-                  then: "$price",
-                  else: 0,
-                },
-              },
-            },
-            usedUnit: {
-              $sum: {
-                $cond: {
-                  if: { $eq: ["$condition", "used"] },
-                  then: 1,
-                  else: 0,
-                },
-              },
-            },
-            usedMsrp: {
-              $sum: {
-                $cond: {
-                  if: { $eq: ["$condition", "used"] },
-                  then: "$price",
-                  else: 0,
-                },
-              },
-            },
-            usedAvgMsrp: {
-              $avg: {
-                $cond: {
-                  if: { $eq: ["$condition", "used"] },
-                  then: "$price",
-                  else: 0,
-                },
-              },
-            },
-            cpoUnit: {
-              $sum: {
-                $cond: {
-                  if: { $eq: ["$condition", "cpo"] },
-                  then: 1,
-                  else: 0,
-                },
-              },
-            },
-            cpoMsrp: {
-              $sum: {
-                $cond: {
-                  if: { $eq: ["$condition", "cpo"] },
-                  then: "$price",
-                  else: 0,
-                },
-              },
-            },
-            cpoAvgMsrp: {
-              $avg: {
-                $cond: {
-                  if: { $eq: ["$condition", "cpo"] },
-                  then: "$price",
-                  else: 0,
-                },
+          },
+          newUnit: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$condition", "new"] },
+                then: 1,
+                else: 0,
               },
             },
           },
+          newMsrp: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$condition", "new"] },
+                then: "$price",
+                else: 0,
+              },
+            },
+          },
+          newAvgMsrp: {
+            $avg: {
+              $cond: {
+                if: { $eq: ["$condition", "new"] },
+                then: "$price",
+                else: 0,
+              },
+            },
+          },
+          usedUnit: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$condition", "used"] },
+                then: 1,
+                else: 0,
+              },
+            },
+          },
+          usedMsrp: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$condition", "used"] },
+                then: "$price",
+                else: 0,
+              },
+            },
+          },
+          usedAvgMsrp: {
+            $avg: {
+              $cond: {
+                if: { $eq: ["$condition", "used"] },
+                then: "$price",
+                else: 0,
+              },
+            },
+          },
+          cpoUnit: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$condition", "cpo"] },
+                then: 1,
+                else: 0,
+              },
+            },
+          },
+          cpoMsrp: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$condition", "cpo"] },
+                then: "$price",
+                else: 0,
+              },
+            },
+          },
+          cpoAvgMsrp: {
+            $avg: {
+              $cond: {
+                if: { $eq: ["$condition", "cpo"] },
+                then: "$price",
+                else: 0,
+              },
+            },
+          },
         },
-        { $sort: { _id: isAsc ? 1 : -1 } },
-        { $skip: skip },
-        { $limit: numberOfRows },
-      ],
+      },
+      { $sort: { _id: isAsc ? 1 : -1 } },
+      { $skip: skip },
+      { $limit: numberOfRows },
     ];
-    if (make.length > 0) {
+    if (make?.length > 0) {
       pipeline.unshift({
         $match: {
           brand: { $in: make },
@@ -261,12 +263,10 @@ export const getTableData = async (req, res) => {
       });
     }
 
-    if (duration.length > 0) {
-      pipeline.unshift({
-        $match: {
-          brand: { $in: make },
-        },
-      });
+    if (duration?.length > 0) {
+      const obj = getFilterPipeLine(duration);
+      console.log(obj.$or);
+      pipeline.unshift({ $match: obj });
     }
 
     const data = await vehicles.aggregate(pipeline);
