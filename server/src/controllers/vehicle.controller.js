@@ -61,6 +61,8 @@ export const getRecentData = async (req, res) => {
 export const getAvgMsrpGraphData = async (req, res) => {
   try {
     const condition = req.query.condition;
+    const { make, duration } = req.body;
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const pipeline = [
@@ -94,6 +96,19 @@ export const getAvgMsrpGraphData = async (req, res) => {
         },
       },
     ];
+    if (make?.length > 0) {
+      pipeline.unshift({
+        $match: {
+          brand: { $in: make },
+        },
+      });
+    }
+
+    if (duration?.length > 0) {
+      const obj = getFilterPipeLine(duration);
+      console.log(obj.$or);
+      pipeline.unshift({ $match: obj });
+    }
     const arr = await vehicles.aggregate(pipeline);
     const data = getGraphData(arr);
 
@@ -106,6 +121,8 @@ export const getAvgMsrpGraphData = async (req, res) => {
 export const getInventoryGraphData = async (req, res) => {
   try {
     const condition = req.query.condition;
+    const { make, duration } = req.body;
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -140,6 +157,19 @@ export const getInventoryGraphData = async (req, res) => {
         },
       },
     ];
+    if (make?.length > 0) {
+      pipeline.unshift({
+        $match: {
+          brand: { $in: make },
+        },
+      });
+    }
+
+    if (duration?.length > 0) {
+      const obj = getFilterPipeLine(duration);
+      console.log(obj.$or);
+      pipeline.unshift({ $match: obj });
+    }
     const arr = await vehicles.aggregate(pipeline);
     const data = getGraphData(arr);
     return res.status(200).json(new ApiResponse(200, data));
