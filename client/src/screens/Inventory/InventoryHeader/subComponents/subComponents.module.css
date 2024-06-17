@@ -9,3 +9,51 @@
     border-radius: 4px;
     user-select: none;
 }
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.menuWrapper {
+    border-radius: 5px;
+    border: 1px solid #FF9926;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 320px;
+    justify-content: space-between;
+    cursor: pointer;
+    background-color: white;
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 41px;
+    left: 0;
+    right: 0;
+    height: auto;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.menuItem {
+    padding: 12px 14px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background-color: #f2f2f2;
+}
+
+.dropDownOpen {
+    rotate: 180deg;
+}
+
+.dropDownClose {
+    rotate: 0deg;
+}

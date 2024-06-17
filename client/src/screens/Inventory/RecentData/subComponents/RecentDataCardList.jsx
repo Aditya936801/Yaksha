@@ -5,7 +5,6 @@ import styles from './subComponents.module.css';
 
 const RecentDataCardList = () => {
   const recentDataList = useSelector(getRecentData, shallowEqual);
-  console.log("recentDataList is",recentDataList);
   return (
     <div className={styles.recentCardListContainer}>
       {recentDataList?.map((recentDataCard) => {

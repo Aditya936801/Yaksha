@@ -1,9 +1,9 @@
 import logo from '../../assets/logo.svg';
 import support from '../../assets/support.svg';
-import dropDown from '../../assets/dropDown.svg';
 import Typography from '../../components/Typography';
 import { TYPOGRAPHY_VARIANTS } from '../../components/Typography/constants';
 import styles from './header.module.css';
+import ProfileMenu from './subComponents/ProfileMenu';
 
 const Header = () => {
   return (
@@ -21,14 +21,10 @@ const Header = () => {
       {/* Right side */}
       <div className={styles.rightSide}>
         <div className={styles.supportSection}>
-          <img src={support} width="21px" height="21px" />
+          <img src={support} width='21px' height='21px' />
           <Typography variant={TYPOGRAPHY_VARIANTS.body2}>Support</Typography>
         </div>
-        <div className={styles.profileContainer}>
-          <div className={styles.profile} />
-          <Typography style={inlineStyles.profile} variant={TYPOGRAPHY_VARIANTS.subtitle1}>Jane</Typography>
-          <img src={dropDown} />
-        </div>
+        <ProfileMenu />
       </div>
       <div></div>
     </div>
@@ -39,9 +35,6 @@ const inlineStyles = {
   title: {
     color: '#FFFFFF',
   },
-  profile: {
-    color: '#FFFFFF',
-  }
 };
 
 export default Header;

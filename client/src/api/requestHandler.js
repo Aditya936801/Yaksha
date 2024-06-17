@@ -11,7 +11,6 @@ const Api = axios.create({
 
 Api.interceptors.response.use((response) => {
   const responseData = get(response, 'data.data', {});
-  console.log("responseData is",responseData);
   return responseData;
 });
 

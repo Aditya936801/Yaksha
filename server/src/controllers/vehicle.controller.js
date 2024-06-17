@@ -10,7 +10,6 @@ import {
 export const getRecentData = async (req, res) => {
   try {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const pipeline = [
       {
         $match: {
@@ -63,7 +62,6 @@ export const getAvgMsrpGraphData = async (req, res) => {
     const { make, duration, condition } = req.body;
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const pipeline = [
       {
         $match: {
@@ -122,7 +120,6 @@ export const getInventoryGraphData = async (req, res) => {
     const { make, duration, condition } = req.body;
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
     const pipeline = [
       {
@@ -178,10 +175,9 @@ export const getInventoryGraphData = async (req, res) => {
 
 export const getTableData = async (req, res) => {
   try {
-    const { isAsc, page, numberOfRows, make, duration } = req.body;
-    const skip = numberOfRows * (page - 1);
+    const { isAsc, page, perPage, make, duration } = req.body;
+    const skip = perPage * (page - 1);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const pipeline = [
       {
         $match: {
@@ -279,9 +275,18 @@ export const getTableData = async (req, res) => {
           },
         },
       },
+
       { $sort: { _id: isAsc ? 1 : -1 } },
-      { $skip: skip },
-      { $limit: numberOfRows },
+      {
+        $facet: {
+          paginatedResults: [{ $skip: skip }, { $limit: perPage }],
+          totalCount: [
+            {
+              $count: "count",
+            },
+          ],
+        },
+      },
     ];
     if (make?.length > 0) {
       pipeline.unshift({
@@ -297,7 +302,20 @@ export const getTableData = async (req, res) => {
       pipeline.unshift({ $match: obj });
     }
 
-    const data = await vehicles.aggregate(pipeline);
+    const tableData = await vehicles.aggregate(pipeline);
+    const totalEntry = tableData[0]?.totalCount[0]?.count;
+    const totalPage = Math.ceil(totalEntry / perPage);
+    const meta = {
+      pagination: {
+        totalPage,
+        totalEntry,
+      },
+    };
+    const data = {
+      tableData: tableData[0]?.paginatedResults,
+      meta,
+    };
+
     return res.status(200).json(new ApiResponse(200, data));
   } catch (err) {
     throw new ApiError(500, err?.message);

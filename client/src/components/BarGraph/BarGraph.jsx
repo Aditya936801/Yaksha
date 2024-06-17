@@ -1,26 +1,35 @@
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-import DotLoader from '../DotLoader';
-import Typography from '../Typography';
-import { TYPOGRAPHY_VARIANTS } from '../Typography/constants';
-import styles from './barGraph.module.css';
+import DotLoader from "../DotLoader";
+import Typography from "../Typography";
+import { TYPOGRAPHY_VARIANTS } from "../Typography/constants";
+import styles from "./barGraph.module.css";
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
+  width: "100%",
+  scales: {
+    y: {
+      border: {
+        display: false,
+      },
+    },
+    x: {
+      grid: {
+        display: false,
+      },
+      border: {
+        display: false,
+      },
+    },
+  },
   plugins: {
     legend: {
-      position: 'top',
+      display: false,
     },
     title: {
       display: false,
@@ -29,7 +38,6 @@ const options = {
 };
 
 const BarGraph = ({ data = {}, isLoading = false, isGraphDataEmpty = false }) => {
-
   if (isGraphDataEmpty) {
     return (
       <div className={styles.container}>

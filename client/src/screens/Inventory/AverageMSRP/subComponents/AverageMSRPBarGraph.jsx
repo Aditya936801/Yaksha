@@ -1,27 +1,21 @@
-import { useMemo } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
-import BarGraph from '../../../../components/BarGraph';
-import {
-  getIsMSRPGraphDataLoading,
-  getSelectedMSRPGraphData,
-} from '../../../../dataLayer/components/averageMSRP/averageMSRPSelector';
-import { isEmpty } from 'lodash-es';
+import { useMemo } from "react";
+import { shallowEqual, useSelector } from "react-redux";
+import BarGraph from "../../../../components/BarGraph";
+import { getIsMSRPGraphDataLoading, getSelectedMSRPGraphData } from "../../../../dataLayer/components/averageMSRP/averageMSRPSelector";
+import { isEmpty } from "lodash-es";
 
 const AverageMSRPBarGraph = () => {
   const graphData = useSelector(getSelectedMSRPGraphData, shallowEqual);
   const isGraphLoading = useSelector(getIsMSRPGraphDataLoading, shallowEqual);
-  const isGraphDataEmpty = useMemo(
-    () => isEmpty(graphData?.values) && !isGraphLoading,
-    [graphData?.values, isGraphLoading]
-  );
+  const isGraphDataEmpty = useMemo(() => isEmpty(graphData?.values) && !isGraphLoading, [graphData?.values, isGraphLoading]);
   const graphConfig = useMemo(() => {
     return {
       labels: graphData?.labels || [],
       datasets: [
         {
-          label: '',
+          label: "",
           data: graphData?.values || [],
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          backgroundColor: "#FF9926",
         },
       ],
     };

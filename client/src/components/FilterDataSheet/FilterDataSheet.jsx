@@ -30,21 +30,8 @@ const FilterDataSheet = ({ onBackClick = noop }) => {
   const dispatch = useDispatch();
 
   const onFilterClick = () => {
-    const selectedMakeFilterList = Object.keys(localSelectedMakeFilter).filter(
-      (item) => localSelectedMakeFilter[item] || false
-    );
-    const selectedDurationFilterList = Object.keys(localSelectedDurationFilter).filter(
-      (item) => localSelectedDurationFilter[item] || false
-    );
     dispatch(setMakeFilter(localSelectedMakeFilter));
     dispatch(setDurationFilter(localSelectedDurationFilter));
-    const filterPayload = {
-      make: selectedMakeFilterList,
-      duration: selectedDurationFilterList,
-      selectedInventory,
-      selectedMSRP,
-    };
-    console.log('filterPayload is', filterPayload);
     onBackClick();
   };
 

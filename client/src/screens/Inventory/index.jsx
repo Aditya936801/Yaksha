@@ -2,6 +2,7 @@ import AverageMSRP from './AverageMSRP';
 import InventoryCount from './InventoryCount';
 import InventoryHeader from './InventoryHeader';
 import RecentData from './RecentData';
+import HistoryLog from "./HistoryLog"
 
 import styles from './style.module.css';
 
@@ -12,6 +13,7 @@ const Inventory = () => {
       <RecentData />
       <InventoryCount />
       <AverageMSRP />
+      <HistoryLog/>
     </div>
   );
 };

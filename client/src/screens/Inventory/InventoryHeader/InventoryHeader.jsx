@@ -7,6 +7,7 @@ import { TYPOGRAPHY_VARIANTS } from '../../../components/Typography/constants';
 import { setMakeFilterOption } from '../../../dataLayer/components/makeFilter/makeFilterAction';
 import styles from './inventoryHeader.module.css';
 import FilterDataButton from './subComponents/FilterDataButton';
+import DealerMenu from './subComponents/DealerMenu';
 
 const InventoryHeader = () => {
   const dispatch = useDispatch();
@@ -26,9 +27,7 @@ const InventoryHeader = () => {
       <div className={styles.headerWrapper}>
         <Typography variant={TYPOGRAPHY_VARIANTS.heading1}>Inventory</Typography>
         <div className={styles.rightSide}>
-          <div>
-            <Typography variant={TYPOGRAPHY_VARIANTS.heading3}>Select Dealer</Typography>
-          </div>
+          <DealerMenu />
           <FilterDataButton />
         </div>
       </div>

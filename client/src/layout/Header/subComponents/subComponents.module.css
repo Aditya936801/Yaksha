@@ -1,0 +1,52 @@
+
+.container {
+    position: relative;
+}
+
+.dropDownOpen {
+    rotate: 180deg;
+}
+
+.dropDownClose {
+    rotate: 0deg;
+}
+
+.profileContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 19px;
+    padding: 7px 10px;
+    background-color: #242424;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile {
+    height: 35px;
+    width: 35px;
+    background-color: #D9D9D9;
+    border-radius: 100px;
+}
+
+.menu {
+    position: absolute;
+    top: 49px;
+    left: 0;
+    right: 0;
+    height: auto;
+    width: 100%;
+    z-index: -1;
+    border-radius: 4px;
+}
+
+.menuItem {
+    padding: 12px 14px;
+    color: rgb(168, 168, 168);
+    background-color: black;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background-color: #404041;
+}
