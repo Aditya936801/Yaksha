@@ -60,8 +60,7 @@ export const getRecentData = async (req, res) => {
 
 export const getAvgMsrpGraphData = async (req, res) => {
   try {
-    const condition = req.query.condition;
-    const { make, duration } = req.body;
+    const { make, duration, condition } = req.body;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -120,8 +119,7 @@ export const getAvgMsrpGraphData = async (req, res) => {
 
 export const getInventoryGraphData = async (req, res) => {
   try {
-    const condition = req.query.condition;
-    const { make, duration } = req.body;
+    const { make, duration, condition } = req.body;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);

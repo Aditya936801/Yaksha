@@ -9,8 +9,8 @@ import {
 const router = Router();
 
 router.get("/recent-data", getRecentData);
-router.get("/graph-data/inventory", getInventoryGraphData);
-router.get("/graph-data/avg-msrp", getAvgMsrpGraphData);
-router.get("/table-data", getTableData);
+router.post("/graph-data/inventory", getInventoryGraphData);
+router.post("/graph-data/avg-msrp", getAvgMsrpGraphData);
+router.post("/table-data", getTableData);
 
 export default router;
