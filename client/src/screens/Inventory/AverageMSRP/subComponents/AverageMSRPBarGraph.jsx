@@ -1,20 +1,26 @@
-import { isEmpty } from 'lodash-es';
 import { useMemo } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import BarGraph from '../../../../components/BarGraph';
-import { getSelectedMSRPGraphData } from '../../../../dataLayer/components/averageMSRP/averageMSRPSelector';
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+import {
+  getIsMSRPGraphDataLoading,
+  getSelectedMSRPGraphData,
+} from '../../../../dataLayer/components/averageMSRP/averageMSRPSelector';
+import { isEmpty } from 'lodash-es';
 
 const AverageMSRPBarGraph = () => {
   const graphData = useSelector(getSelectedMSRPGraphData, shallowEqual);
+  const isGraphLoading = useSelector(getIsMSRPGraphDataLoading, shallowEqual);
+  const isGraphDataEmpty = useMemo(
+    () => isEmpty(graphData?.values) && !isGraphLoading,
+    [graphData?.values, isGraphLoading]
+  );
   const graphConfig = useMemo(() => {
     return {
-      labels,
+      labels: graphData?.labels || [],
       datasets: [
         {
-          label: 'Dataset 1',
-          data: graphData,
+          label: '',
+          data: graphData?.values || [],
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
       ],
@@ -22,7 +28,9 @@ const AverageMSRPBarGraph = () => {
   }, [graphData]);
 
   return (
-    <div>{!isEmpty(graphData) ? <BarGraph data={graphConfig} /> : <div>loadinnggg....</div>}</div>
+    <div>
+      <BarGraph data={graphConfig} isLoading={isGraphLoading} isGraphDataEmpty={isGraphDataEmpty} />
+    </div>
   );
 };
 

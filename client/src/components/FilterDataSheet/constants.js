@@ -12,41 +12,41 @@ export const FILTER_LABEL = {
 export const DURATION_FILTER_LIST = [
   {
     label: 'Last Month',
-    value: 1,
+    value: 'lastMonth',
   },
   {
     label: 'This Month',
-    value: 0,
+    value: 'thisMonth',
   },
   {
     label: 'Last 3 Months',
-    value: 3,
+    value: 'last3Months',
   },
   {
     label: 'Last 6 Months',
-    value: 6,
+    value: 'last6Months',
   },
   {
     label: 'This Year',
-    value: 12,
+    value: 'thisYear',
   },
   {
     label: 'Last Year',
-    value: 24,
+    value: 'lastYear',
   },
 ];
 
 export const MAKE_FILTER_LIST = [
   {
     label: 'Ford',
-    value: 'ford',
+    value: 'Ford',
   },
   {
     label: 'Cadillac',
-    value: 'cadillac',
+    value: 'Cadillac',
   },
   {
     label: 'Jeep',
-    value: 'jeep',
+    value: 'Jeep',
   },
 ];

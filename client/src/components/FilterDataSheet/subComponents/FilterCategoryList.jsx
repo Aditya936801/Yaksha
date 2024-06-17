@@ -2,6 +2,7 @@ import { noop } from 'lodash-es';
 import Typography from '../../Typography';
 import FilterCategoryItem from './FilterCategoryItem';
 import styles from './subComponents.module.css';
+import { TYPOGRAPHY_VARIANTS } from '../../Typography/constants';
 
 const FilterCategoryList = ({
   category,
@@ -12,7 +13,7 @@ const FilterCategoryList = ({
   return (
     <div className={styles.filterCategoryContainer}>
       <div className={styles.filterCategoryList} key={category}>
-        <Typography>{category}</Typography>
+        <Typography variant={TYPOGRAPHY_VARIANTS.subtitle2}>{category}</Typography>
         <div className={styles.filterItemContainer}>
           {categoryList?.map((categoryItem) => {
             const { label = '', value = '' } = categoryItem;

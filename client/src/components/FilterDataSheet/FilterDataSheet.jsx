@@ -2,43 +2,86 @@ import Separator from '../Separator';
 import FilterHeader from './subComponents/FilterHeader';
 import MakeFilter from './subComponents/MakeFilter';
 import DurationFilter from './subComponents/DurationFilter';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
   getSelectedDurationFilter,
   getSelectedMakeFilter,
 } from '../../dataLayer/components/filterDataSheet/filterDataSheetSelector';
 import styles from './filterDataSheet.module.css';
 import Button from '../Button';
+import { noop } from 'lodash-es';
+import {
+  setDurationFilter,
+  setMakeFilter,
+} from '../../dataLayer/components/filterDataSheet/filterDataSheetAction';
+import { useState } from 'react';
+import { getSelectedInventory } from '../../dataLayer/components/inventoryCount/inventoryCountSelector';
+import { getSelectedMSRP } from '../../dataLayer/components/averageMSRP/averageMSRPSelector';
+import close from '../../assets/close.svg';
 
-const FilterDataSheet = () => {
+const FilterDataSheet = ({ onBackClick = noop }) => {
   const selectedMakeFilter = useSelector(getSelectedMakeFilter, shallowEqual);
   const selectedDurationFilter = useSelector(getSelectedDurationFilter, shallowEqual);
+  const selectedInventory = useSelector(getSelectedInventory, shallowEqual);
+  const selectedMSRP = useSelector(getSelectedMSRP, shallowEqual);
+  const [localSelectedMakeFilter, setLocalSelectedMakeFilter] = useState(selectedMakeFilter);
+  const [localSelectedDurationFilter, setLocalSelectedDurationFilter] =
+    useState(selectedDurationFilter);
+  const dispatch = useDispatch();
 
   const onFilterClick = () => {
-    const selectedMakeFilterList = Object.keys(selectedMakeFilter).filter(
-      (item) => selectedMakeFilter[item] || false
+    const selectedMakeFilterList = Object.keys(localSelectedMakeFilter).filter(
+      (item) => localSelectedMakeFilter[item] || false
     );
-    const selectedDurationFilterList = Object.keys(selectedDurationFilter).filter(
-      (item) => selectedDurationFilter[item] || false
+    const selectedDurationFilterList = Object.keys(localSelectedDurationFilter).filter(
+      (item) => localSelectedDurationFilter[item] || false
     );
+    dispatch(setMakeFilter(localSelectedMakeFilter));
+    dispatch(setDurationFilter(localSelectedDurationFilter));
     const filterPayload = {
       make: selectedMakeFilterList,
       duration: selectedDurationFilterList,
+      selectedInventory,
+      selectedMSRP,
     };
-    console.log(filterPayload);
+    console.log('filterPayload is', filterPayload);
+    onBackClick();
+  };
+
+  const resetFilter = () => {
+    onBackClick();
+    dispatch(setMakeFilter({}));
+    dispatch(setDurationFilter({}));
   };
 
   return (
     <div className={styles.container}>
-      <FilterHeader />
+      <FilterHeader onBackClick={onBackClick} />
       <Separator top={25} bottom={25} />
-      <MakeFilter />
-      <Separator top={20} bottom={25} />
-      <DurationFilter />
-      <Separator top={20} bottom={25} />
-      <div className={styles.buttonWrapper}>
-        <Button onClick={onFilterClick} title={'Apply Filter'} />
-        <Button onClick={onFilterClick} title={'Remove All Filters'} inverted />
+      <div className={styles.scrollArea}>
+        <MakeFilter
+          localSelectedMakeFilter={localSelectedMakeFilter}
+          setLocalSelectedMakeFilter={setLocalSelectedMakeFilter}
+        />
+        <Separator top={20} bottom={25} />
+        <DurationFilter
+          localSelectedDurationFilter={localSelectedDurationFilter}
+          setLocalSelectedDurationFilter={setLocalSelectedDurationFilter}
+        />
+      </div>
+
+      <div className={styles.bottomSection}>
+        <Separator bottom={25} />
+        <div className={styles.buttonWrapper}>
+          <Button onClick={onFilterClick} title={'Apply Filter'} />
+
+          <Button
+            leftSide={<img src={close} alt='close' />}
+            onClick={resetFilter}
+            title={'Remove All Filters'}
+            inverted
+          />
+        </div>
       </div>
     </div>
   );

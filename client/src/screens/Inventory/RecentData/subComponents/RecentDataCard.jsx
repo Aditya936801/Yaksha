@@ -18,6 +18,8 @@ const RecentDataCard = (props) => {
 const inlineStyles = {
   category: {
     color: '#FF9926',
+    textTransform: 'uppercase',
+    marginTop: 5,
   },
 };
 

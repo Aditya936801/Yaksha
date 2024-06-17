@@ -4,6 +4,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 35px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .leftSide {
@@ -47,4 +50,11 @@
     background-color: #242424;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.profile {
+    height: 35px;
+    width: 35px;
+    background-color: #D9D9D9;
+    border-radius: 100px;
 }

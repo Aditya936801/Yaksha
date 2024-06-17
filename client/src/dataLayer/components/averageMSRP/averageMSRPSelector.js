@@ -9,3 +9,9 @@ export const getSelectedMSRP = (state) => {
   const data = get(state, 'averageMSRP.selectedMSRP', 'new');
   return data;
 };
+
+
+export const getIsMSRPGraphDataLoading = (state) => {
+  const data = get(state, 'averageMSRP.isGraphDataLoading', false);
+  return data;
+};

@@ -1,33 +1,31 @@
 import { cloneDeep } from 'lodash-es';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { setMakeFilter } from '../../../dataLayer/components/filterDataSheet/filterDataSheetAction';
-import { getSelectedMakeFilter } from '../../../dataLayer/components/filterDataSheet/filterDataSheetSelector';
-import { FILTER_LABEL, MAKE_FILTER_LIST } from '../constants';
-import FilterCategoryList from './FilterCategoryList';
 import { memo } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
+import { getMakeFilterListData } from '../../../dataLayer/components/makeFilter/makeFilterSelector';
+import { FILTER_LABEL } from '../constants';
+import FilterCategoryList from './FilterCategoryList';
 
-const MakeFilter = () => {
-  const dispatch = useDispatch();
-  const selectedMakeFilter = useSelector(getSelectedMakeFilter, shallowEqual);
+const MakeFilter = ({ localSelectedMakeFilter, setLocalSelectedMakeFilter }) => {
+  const makeFilterOptions = useSelector(getMakeFilterListData, shallowEqual);
 
   const handleCheckbox = (value) => {
-    const tempSelectedMakeFilter = cloneDeep(selectedMakeFilter);
+    const tempSelectedMakeFilter = cloneDeep(localSelectedMakeFilter);
     const isStoredValue = tempSelectedMakeFilter[value] ? true : false;
     if (isStoredValue) {
       tempSelectedMakeFilter[value] = false;
     } else {
       tempSelectedMakeFilter[value] = true;
     }
-    dispatch(setMakeFilter(tempSelectedMakeFilter));
+    setLocalSelectedMakeFilter(tempSelectedMakeFilter);
   };
 
   return (
     <div>
       <FilterCategoryList
         category={FILTER_LABEL.make.label}
-        categoryList={MAKE_FILTER_LIST}
+        categoryList={makeFilterOptions}
         handleCheckbox={handleCheckbox}
-        selectedFilter={selectedMakeFilter}
+        selectedFilter={localSelectedMakeFilter}
       />
     </div>
   );

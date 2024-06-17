@@ -1,10 +1,11 @@
+import { shallowEqual, useSelector } from 'react-redux';
+import { getRecentData } from '../../../../dataLayer/components/recentData/recentDataSelector';
 import RecentDataCard from './RecentDataCard';
-import RECENT_DATA from '../MOCK_DATA.json';
 import styles from './subComponents.module.css';
 
 const RecentDataCardList = () => {
-  const recentDataList = RECENT_DATA;
-
+  const recentDataList = useSelector(getRecentData, shallowEqual);
+  console.log("recentDataList is",recentDataList);
   return (
     <div className={styles.recentCardListContainer}>
       {recentDataList?.map((recentDataCard) => {

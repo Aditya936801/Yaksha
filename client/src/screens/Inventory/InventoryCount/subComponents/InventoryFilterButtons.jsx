@@ -3,32 +3,59 @@ import FilterButtons from '../../../../components/FilterButtons';
 import { getSelectedInventory } from '../../../../dataLayer/components/inventoryCount/inventoryCountSelector';
 import {
   setInventoryGraphData,
+  setIsInventoryGraphDataLoading,
   setSelectedInventory,
 } from '../../../../dataLayer/components/inventoryCount/inventoryCountAction';
-import { useEffect } from 'react';
-
-// temp function to generate chart data
-function getRandomNumbers() {
-  let numbers = [];
-  const min = 1; // Minimum value for random number (adjust as needed)
-  const max = 100; // Maximum value for random number (adjust as needed)
-
-  for (let i = 0; i < 30; i++) {
-    let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    numbers.push(randomNumber);
-  }
-
-  return numbers;
-}
+import { useCallback, useEffect } from 'react';
+import { fetch_inventory_graph_data } from '../../../../api/inventory';
+import {
+  getSelectedDurationFilter,
+  getSelectedMakeFilter,
+} from '../../../../dataLayer/components/filterDataSheet/filterDataSheetSelector';
 
 const InventoryFilterButtons = () => {
   const dispatch = useDispatch();
   const selectedInventory = useSelector(getSelectedInventory, shallowEqual);
+  const selectedMakeFilter = useSelector(getSelectedMakeFilter, shallowEqual);
+  const selectedDurationFilter = useSelector(getSelectedDurationFilter, shallowEqual);
+
+  const getGraphData = useCallback(
+    async (inventoryType = '', makeFilters = {}, durationFilters = {}) => {
+      try {
+        dispatch(setIsInventoryGraphDataLoading(true));
+        const selectedMakeFilterList = Object.keys(makeFilters).filter(
+          (item) => makeFilters[item] || false
+        );
+        const selectedDurationFilterList = Object.keys(durationFilters).filter(
+          (item) => durationFilters[item] || false
+        );
+        const graphData = await fetch_inventory_graph_data(
+          inventoryType,
+          selectedMakeFilterList,
+          selectedDurationFilterList
+        );
+        if (graphData?.error) {
+          console.log(graphData?.error);
+        } else {
+          dispatch(setInventoryGraphData(graphData));
+        }
+      } catch (err) {
+        const payload = {
+          labels: [],
+          values: [],
+        };
+        dispatch(setInventoryGraphData(payload));
+        console.log(err);
+      } finally {
+        dispatch(setIsInventoryGraphDataLoading(false));
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    const graphData = getRandomNumbers();
-    dispatch(setInventoryGraphData(graphData));
-  }, [dispatch, selectedInventory]);
+    getGraphData(selectedInventory, selectedMakeFilter, selectedDurationFilter);
+  }, [getGraphData, selectedInventory, selectedMakeFilter, selectedDurationFilter]);
 
   const handleFilter = (value) => {
     dispatch(setSelectedInventory(value));

@@ -14,7 +14,15 @@ const FilterButtons = ({ selectedButtonFilter, setSelectedButtonFilter }) => {
         const onClick = () => {
           handleFilterClick(value);
         };
-        return <Button title={label} key={value} inverted={!isSelected} onClick={onClick} />;
+        return (
+          <Button
+            invertedColor='#000000'
+            title={label}
+            key={value}
+            inverted={!isSelected}
+            onClick={onClick}
+          />
+        );
       })}
     </div>
   );

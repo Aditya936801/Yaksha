@@ -1,9 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setMSRPGraphData, setSelectedMSRP } from './averageMSRPAction';
+import { setIsMSRPGraphDataLoading, setMSRPGraphData, setSelectedMSRP } from './averageMSRPAction';
 
 const initialState = {
   graphData: [],
   selectedMSRP: 'new',
+  isGraphDataLoading:  false,
 };
 
 export default createReducer(initialState, (builder) => {
@@ -12,5 +13,8 @@ export default createReducer(initialState, (builder) => {
   });
   builder.addCase(setSelectedMSRP, (state, action) => {
     state.selectedMSRP = action.payload;
+  });
+  builder.addCase(setIsMSRPGraphDataLoading, (state, action) => {
+    state.isGraphDataLoading = action.payload;
   });
 });

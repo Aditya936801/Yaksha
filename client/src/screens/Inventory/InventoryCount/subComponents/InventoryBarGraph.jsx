@@ -1,20 +1,26 @@
 import { useMemo } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import BarGraph from '../../../../components/BarGraph';
-import { getSelectedInventoryGraphData } from '../../../../dataLayer/components/inventoryCount/inventoryCountSelector';
+import {
+  getIsInventoryGraphDataLoading,
+  getSelectedInventoryGraphData,
+} from '../../../../dataLayer/components/inventoryCount/inventoryCountSelector';
 import { isEmpty } from 'lodash-es';
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
 const InventoryBarGraph = () => {
   const graphData = useSelector(getSelectedInventoryGraphData, shallowEqual);
+  const isGraphLoading = useSelector(getIsInventoryGraphDataLoading, shallowEqual);
+  const isGraphDataEmpty = useMemo(
+    () => isEmpty(graphData?.values) && !isGraphLoading,
+    [graphData?.values, isGraphLoading]
+  );
   const graphConfig = useMemo(() => {
     return {
-      labels,
+      labels: graphData?.labels || [],
       datasets: [
         {
           label: 'Dataset 1',
-          data: graphData,
+          data: graphData?.values || [],
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
       ],
@@ -22,7 +28,7 @@ const InventoryBarGraph = () => {
   }, [graphData]);
 
   return (
-    <div>{!isEmpty(graphData) ? <BarGraph data={graphConfig} /> : <div>loadinnggg....</div>}</div>
+    <BarGraph data={graphConfig} isLoading={isGraphLoading} isGraphDataEmpty={isGraphDataEmpty} />
   );
 };
 

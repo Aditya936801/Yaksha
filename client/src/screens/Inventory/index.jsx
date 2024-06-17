@@ -1,17 +1,19 @@
-import FilterDataSheet from "../../components/FilterDataSheet/FilterDataSheet"
-import AverageMSRP from "./AverageMSRP"
-import InventoryCount from "./InventoryCount"
-import RecentData from "./RecentData"
+import AverageMSRP from './AverageMSRP';
+import InventoryCount from './InventoryCount';
+import InventoryHeader from './InventoryHeader';
+import RecentData from './RecentData';
+
+import styles from './style.module.css';
 
 const Inventory = () => {
   return (
-    <div>
-        <RecentData />
-        <InventoryCount />
-        <AverageMSRP />
-        <FilterDataSheet />
+    <div className={styles.container}>
+      <InventoryHeader />
+      <RecentData />
+      <InventoryCount />
+      <AverageMSRP />
     </div>
-  )
-}
+  );
+};
 
-export default Inventory
+export default Inventory;

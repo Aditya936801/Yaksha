@@ -1,9 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setInventoryGraphData, setSelectedInventory } from './inventoryCountAction';
+import { setInventoryGraphData, setIsInventoryGraphDataLoading, setSelectedInventory } from './inventoryCountAction';
 
 const initialState = {
   graphData: [],
   selectedInventory: 'new',
+  isGraphDataLoading: false
 };
 
 export default createReducer(initialState, (builder) => {
@@ -12,5 +13,8 @@ export default createReducer(initialState, (builder) => {
   });
   builder.addCase(setSelectedInventory, (state, action) => {
     state.selectedInventory = action.payload;
+  });
+  builder.addCase(setIsInventoryGraphDataLoading, (state, action) => {
+    state.isGraphDataLoading = action.payload;
   });
 });

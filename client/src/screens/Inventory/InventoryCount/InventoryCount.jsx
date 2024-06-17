@@ -4,6 +4,7 @@ import InventoryBarGraph from './subComponents/InventoryBarGraph';
 import InventoryFilterButtons from './subComponents/InventoryFilterButtons';
 
 const InventoryCount = () => {
+  
   return (
     <div>
       <div className={styles.titleWrapper}>

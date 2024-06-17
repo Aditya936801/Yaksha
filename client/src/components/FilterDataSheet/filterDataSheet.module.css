@@ -1,11 +1,37 @@
 .container {
-    background-color: white;
-    padding: 30px;
+  background-color: white;
+  padding: 30px;
+  position: relative;
+  height: 100vh;
+  padding-bottom: 170px;
+  overflow: hidden;
+}
+
+.scrollArea {
+  overflow: auto;
+  height: 100%;
+}
+
+.bottomSection {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+  padding: 0px 30px 30px 30px;
+  background-color: white;
 }
 
 .buttonWrapper {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.removeBtnWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
 }

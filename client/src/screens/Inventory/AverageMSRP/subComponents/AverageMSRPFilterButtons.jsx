@@ -1,34 +1,61 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import FilterButtons from '../../../../components/FilterButtons';
 import {
+  setIsMSRPGraphDataLoading,
   setMSRPGraphData,
   setSelectedMSRP,
 } from '../../../../dataLayer/components/averageMSRP/averageMSRPAction';
 import { getSelectedMSRP } from '../../../../dataLayer/components/averageMSRP/averageMSRPSelector';
-
-// temp function to generate chart data
-function getRandomNumbers() {
-  let numbers = [];
-  const min = 1; // Minimum value for random number (adjust as needed)
-  const max = 100; // Maximum value for random number (adjust as needed)
-
-  for (let i = 0; i < 30; i++) {
-    let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    numbers.push(randomNumber);
-  }
-
-  return numbers;
-}
+import { fetch_MSRP_graph_data } from '../../../../api/inventory';
+import {
+  getSelectedDurationFilter,
+  getSelectedMakeFilter,
+} from '../../../../dataLayer/components/filterDataSheet/filterDataSheetSelector';
 
 const AverageMSRPFilterButtons = () => {
   const dispatch = useDispatch();
   const selectedMSRP = useSelector(getSelectedMSRP, shallowEqual);
+  const selectedMakeFilter = useSelector(getSelectedMakeFilter, shallowEqual);
+  const selectedDurationFilter = useSelector(getSelectedDurationFilter, shallowEqual);
+
+  const getGraphData = useCallback(
+    async (inventoryType = '', makeFilters = {}, durationFilters = {}) => {
+      try {
+        dispatch(setIsMSRPGraphDataLoading(true));
+        const selectedMakeFilterList = Object.keys(makeFilters).filter(
+          (item) => makeFilters[item] || false
+        );
+        const selectedDurationFilterList = Object.keys(durationFilters).filter(
+          (item) => durationFilters[item] || false
+        );
+        const graphData = await fetch_MSRP_graph_data(
+          inventoryType,
+          selectedMakeFilterList,
+          selectedDurationFilterList
+        );
+        if (graphData?.error) {
+          console.log(graphData?.error);
+        } else {
+          dispatch(setMSRPGraphData(graphData));
+        }
+      } catch (err) {
+        const payload = {
+          labels: [],
+          values: [],
+        };
+        dispatch(setMSRPGraphData(payload));
+        console.log(err);
+      } finally {
+        dispatch(setIsMSRPGraphDataLoading(false));
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    const graphData = getRandomNumbers();
-    dispatch(setMSRPGraphData(graphData));
-  }, [dispatch, selectedMSRP]);
+    getGraphData(selectedMSRP, selectedMakeFilter, selectedDurationFilter);
+  }, [getGraphData, selectedDurationFilter, selectedMSRP, selectedMakeFilter]);
 
   const handleFilter = (value) => {
     dispatch(setSelectedMSRP(value));
